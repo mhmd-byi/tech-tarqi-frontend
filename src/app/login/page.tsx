@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as yup from "yup";
 
-import { ApiError, clearToken, setToken, signIn } from "@/lib/api";
+import { ApiError, clearSession, setStoredUser, setToken, signIn } from "@/lib/api";
 
 const loginSchema = yup.object({
   identifier: yup.string().trim().required("Enter your email or username"),
@@ -29,14 +29,15 @@ export default function AdminLoginPage() {
       try {
         const result = await signIn(value.identifier.trim(), value.password);
 
-        if (result.user.role !== "admin") {
-          clearToken();
-          setError("This account does not have administrator access.");
+        if (result.user.role !== "admin" && result.user.role !== "provider") {
+          clearSession();
+          setError("This account does not have access to the panel.");
           return;
         }
 
         setToken(result.token);
-        router.replace("/kyc");
+        setStoredUser(result.user);
+        router.replace(result.user.role === "admin" ? "/kyc" : "/chat");
       } catch (err) {
         setError(err instanceof ApiError ? err.message : "Something went wrong. Please try again.");
       }
