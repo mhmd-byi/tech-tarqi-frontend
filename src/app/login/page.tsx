@@ -21,7 +21,8 @@ export default function AdminLoginPage() {
 
   const form = useForm({
     defaultValues: { identifier: "", password: "" },
-    validators: { onChange: loginSchema },
+    // yup's Standard Schema validate() is async, so it only fits the *Async slots.
+    validators: { onChangeAsync: loginSchema, onSubmitAsync: loginSchema },
     onSubmit: async ({ value }) => {
       setError(null);
 

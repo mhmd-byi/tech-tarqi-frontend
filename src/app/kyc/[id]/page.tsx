@@ -87,7 +87,7 @@ export default function KycReviewPage() {
 
   const form = useForm({
     defaultValues: { decision: "", rejectionReason: "" },
-    validators: { onSubmit: reviewSchema },
+    validators: { onSubmitAsync: reviewSchema },
     onSubmit: async ({ value }) => {
       setActionError(null);
 
