@@ -44,7 +44,7 @@ const providerSchema = yup.object({
 });
 
 const inputClass =
-  "mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-blue-500";
+  "mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-brand";
 
 export default function ProvidersPage() {
   const [providers, setProviders] = useState<Provider[] | null>(null);
@@ -181,7 +181,7 @@ export default function ProvidersPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+                className="mt-6 w-full rounded-lg bg-brand px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-dark disabled:opacity-50"
               >
                 {isSubmitting ? "Creating…" : "Create provider"}
               </button>

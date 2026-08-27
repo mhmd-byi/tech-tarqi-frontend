@@ -60,7 +60,7 @@ export function MessageList({
             <div className="max-w-[75%]">
               <div
                 className={`rounded-2xl px-3 py-2 ${
-                  isOwn ? "bg-blue-600 text-white" : "bg-zinc-100 text-zinc-900"
+                  isOwn ? "bg-brand text-white" : "bg-zinc-100 text-zinc-900"
                 }`}
               >
                 {message.kind === "signal" && message.signal && (

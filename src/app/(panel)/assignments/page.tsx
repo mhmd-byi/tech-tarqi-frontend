@@ -113,7 +113,7 @@ export default function AssignmentsPage() {
                       onChange={(event) =>
                         setChoice((current) => ({ ...current, [user.id]: event.target.value }))
                       }
-                      className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm outline-none focus:border-blue-500"
+                      className="rounded-lg border border-zinc-300 px-2 py-1.5 text-sm outline-none focus:border-brand"
                     >
                       <option value="">Select a provider…</option>
                       {providers
@@ -129,7 +129,7 @@ export default function AssignmentsPage() {
                     <button
                       onClick={() => handleAssign(user.id)}
                       disabled={!choice[user.id] || busyUserId === user.id}
-                      className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-40"
+                      className="rounded-lg bg-brand px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-brand-dark disabled:opacity-40"
                     >
                       {assignment ? "Reassign" : "Assign"}
                     </button>

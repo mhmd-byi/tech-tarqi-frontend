@@ -159,7 +159,7 @@ export default function ChatPage() {
         <select
           value={providerId ?? ""}
           onChange={(event) => setProviderId(event.target.value || null)}
-          className="mt-4 rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
+          className="mt-4 rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-brand"
         >
           {providers.length === 0 && <option value="">No providers yet</option>}
           {providers.map((provider) => (
@@ -178,7 +178,7 @@ export default function ChatPage() {
             <button
               onClick={() => setRoom({ type: "broadcast" })}
               className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
-                room.type === "broadcast" ? "bg-zinc-900 text-white" : "hover:bg-zinc-100"
+                room.type === "broadcast" ? "bg-brand text-white" : "hover:bg-zinc-100"
               }`}
             >
               Broadcast
@@ -198,11 +198,11 @@ export default function ChatPage() {
                   key={thread.id}
                   onClick={() => setRoom({ type: "direct", thread })}
                   className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                    active ? "bg-zinc-900 text-white" : "hover:bg-zinc-100"
+                    active ? "bg-brand text-white" : "hover:bg-zinc-100"
                   }`}
                 >
                   <span className="block font-medium">{thread.user.name}</span>
-                  <span className={`text-xs ${active ? "text-zinc-300" : "text-zinc-500"}`}>
+                  <span className={`text-xs ${active ? "text-brand-soft" : "text-zinc-500"}`}>
                     {thread.status === "archived" ? "Archived" : `@${thread.user.username}`}
                   </span>
                 </button>

@@ -32,7 +32,7 @@ const signalSchema = yup.object({
 });
 
 const fieldClass =
-  "mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-blue-500";
+  "mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-brand";
 
 export function Composer({
   onSend,
@@ -111,7 +111,7 @@ export function Composer({
             key={option}
             onClick={() => setMode(option)}
             className={`rounded-lg px-2.5 py-1 text-xs font-medium capitalize transition-colors ${
-              mode === option ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"
+              mode === option ? "bg-brand text-white" : "text-zinc-600 hover:bg-zinc-100"
             }`}
           >
             {option}
@@ -129,7 +129,7 @@ export function Composer({
               onChange={(event) => setText(event.target.value)}
               rows={2}
               placeholder={placeholder}
-              className="w-full resize-none rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-blue-500"
+              className="w-full resize-none rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-brand"
             />
             {file && (
               <p className="mt-1 text-xs text-zinc-500">
@@ -163,7 +163,7 @@ export function Composer({
           <button
             onClick={sendMessage}
             disabled={!canSend}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-40"
+            className="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-dark disabled:opacity-40"
           >
             {sending ? "Sending…" : "Send"}
           </button>
@@ -300,7 +300,7 @@ export function Composer({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-3 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-40"
+                className="mt-3 rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-dark disabled:opacity-40"
               >
                 {isSubmitting ? "Posting…" : "Post signal"}
               </button>

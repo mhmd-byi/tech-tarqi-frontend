@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as yup from "yup";
@@ -13,7 +14,7 @@ const loginSchema = yup.object({
 });
 
 const inputClass =
-  "mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 outline-none focus:border-blue-500";
+  "mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 outline-none focus:border-brand";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -53,9 +54,8 @@ export default function AdminLoginPage() {
         }}
         className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm"
       >
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-          Tech Tarqi Admin Panel
-        </h1>
+        <Image src="/logo.png" alt="Tech Tarqi" width={180} height={39} className="h-9 w-auto" priority />
+        <h1 className="mt-6 text-2xl font-semibold tracking-tight text-zinc-900">Admin Panel</h1>
         <p className="mt-2 text-sm text-zinc-600">Sign in with your administrator account.</p>
 
         <form.Field name="identifier">
@@ -110,7 +110,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={!canSubmit || isSubmitting}
-              className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+              className="mt-6 w-full rounded-lg bg-brand px-4 py-2.5 font-medium text-white transition-colors hover:bg-brand-dark disabled:opacity-50"
             >
               {isSubmitting ? "Signing in…" : "Sign in"}
             </button>

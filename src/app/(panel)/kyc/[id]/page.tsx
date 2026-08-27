@@ -130,7 +130,7 @@ export default function KycReviewPage() {
 
   return (
     <>
-      <Link href="/kyc" className="text-sm font-medium text-blue-600 hover:underline">
+      <Link href="/kyc" className="text-sm font-medium text-brand hover:underline">
         ← Back to queue
       </Link>
 
@@ -197,7 +197,7 @@ export default function KycReviewPage() {
                   onChange={(event) => field.handleChange(event.target.value)}
                   rows={3}
                   placeholder="e.g. The passport photo is blurry — please retake it in better light."
-                  className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-blue-500"
+                  className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 outline-none focus:border-brand"
                 />
                 {field.state.meta.errors[0] && (
                   <p className="mt-1 text-sm text-red-600">{field.state.meta.errors[0]?.message}</p>

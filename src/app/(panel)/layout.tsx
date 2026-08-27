@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -52,8 +53,8 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
     <div className="flex flex-1 flex-col bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 py-4">
-          <Link href={links[0]?.href ?? "/chat"} className="text-lg font-semibold tracking-tight text-zinc-900">
-            Tech Tarqi Admin Panel
+          <Link href={links[0]?.href ?? "/chat"} className="flex items-center gap-2">
+            <Image src="/logo.png" alt="Tech Tarqi" width={140} height={30} className="h-7 w-auto" priority />
           </Link>
 
           <nav className="flex flex-1 items-center gap-1">
@@ -65,7 +66,7 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
                   key={item.href}
                   href={item.href}
                   className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                    active ? "bg-zinc-900 text-white" : "text-zinc-600 hover:bg-zinc-100"
+                    active ? "bg-brand text-white" : "text-zinc-600 hover:bg-zinc-100"
                   }`}
                 >
                   {item.label}
