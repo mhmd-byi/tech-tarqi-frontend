@@ -40,7 +40,7 @@ export default function KycQueuePage() {
             onClick={() => setStatus(option)}
             className={`rounded-lg px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
               status === option
-                ? "bg-zinc-900 text-white"
+                ? "bg-brand text-white"
                 : "border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100"
             }`}
           >
@@ -91,7 +91,7 @@ export default function KycQueuePage() {
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/kyc/${submission.id}`}
-                      className="font-medium text-blue-600 hover:underline"
+                      className="font-medium text-brand hover:underline"
                     >
                       Review
                     </Link>
