@@ -95,6 +95,35 @@ export type OutgoingMessage =
       note?: string;
     };
 
+export type PlanService = "forex" | "comex" | "index";
+export type PlanTier = "bronze" | "silver" | "gold" | "platinum";
+
+export type BillingMode = "recurring" | "one_time";
+
+export type Plan = {
+  id: string;
+  service: PlanService;
+  tier: PlanTier;
+  label: string;
+  priceCents: number;
+  currency: string;
+  intervalMonths: number;
+  billingMode: BillingMode;
+  popular: boolean;
+  active: boolean;
+  paypalLinked?: boolean;
+};
+
+export type SubscriptionRow = {
+  id: string;
+  status: "incomplete" | "active" | "past_due" | "canceled" | "unpaid";
+  isActive: boolean;
+  currentPeriodEnd?: string;
+  cancelAtPeriodEnd?: boolean;
+  plan: Omit<Plan, "popular" | "active" | "paypalLinked"> | null;
+  user: { _id: string; name: string; username: string; email: string } | null;
+};
+
 export class ApiError extends Error {}
 
 export function getToken(): string | null {
@@ -282,6 +311,21 @@ export async function fetchImageUrl(id: string, type: "passport" | "selfie"): Pr
 export async function fetchMessageImageUrl(messageId: string): Promise<string> {
   const response = await requestRaw(`/chat/messages/${messageId}/image`);
   return URL.createObjectURL(await response.blob());
+}
+
+export function listPlans(): Promise<Plan[]> {
+  return request<Plan[]>("/plans");
+}
+
+export function updatePlan(
+  id: string,
+  changes: { priceCents?: number; active?: boolean; popular?: boolean }
+): Promise<Plan> {
+  return postJson<Plan>(`/plans/${id}`, changes, "PATCH");
+}
+
+export function listSubscriptions(): Promise<SubscriptionRow[]> {
+  return request<SubscriptionRow[]>("/subscriptions");
 }
 
 export function connectSocket(): Socket | null {
