@@ -55,13 +55,22 @@ export default function SubscriptionsPage() {
                     <div className="font-medium text-zinc-900">{row.user?.name ?? "—"}</div>
                     <div className="text-xs text-zinc-500">{row.user?.email}</div>
                   </td>
-                  <td className="px-4 py-3 text-zinc-700">{row.plan?.label ?? "—"}</td>
                   <td className="px-4 py-3 text-zinc-700">
-                    {row.plan
-                      ? `${formatPrice(row.plan.priceCents, row.plan.currency)} · ${formatTerm(
-                          row.plan.intervalMonths
-                        )}`
-                      : "—"}
+                    {row.plan?.label ?? "—"}
+                    {row.isTrial && (
+                      <span className="ml-2 rounded bg-brand-soft px-1.5 py-0.5 text-xs font-medium text-brand">
+                        Trial
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-zinc-700">
+                    {row.isTrial
+                      ? "Free · 3 days"
+                      : row.plan
+                        ? `${formatPrice(row.plan.priceCents, row.plan.currency)} · ${formatTerm(
+                            row.plan.intervalMonths
+                          )}`
+                        : "—"}
                   </td>
                   <td className="px-4 py-3">
                     <span

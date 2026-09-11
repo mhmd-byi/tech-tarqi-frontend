@@ -118,6 +118,7 @@ export type SubscriptionRow = {
   id: string;
   status: "incomplete" | "active" | "past_due" | "canceled" | "unpaid";
   isActive: boolean;
+  isTrial: boolean;
   currentPeriodEnd?: string;
   cancelAtPeriodEnd?: boolean;
   plan: Omit<Plan, "popular" | "active" | "paypalLinked"> | null;
