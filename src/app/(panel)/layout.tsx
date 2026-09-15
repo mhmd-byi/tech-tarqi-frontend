@@ -12,6 +12,7 @@ const NAV = [
   { href: "/providers", label: "Providers", roles: ["admin"] },
   { href: "/assignments", label: "Assignments", roles: ["admin"] },
   { href: "/chat", label: "Chat", roles: ["admin", "provider"] },
+  { href: "/settings", label: "Settings", roles: ["admin"] },
 ];
 
 export default function PanelLayout({ children }: { children: React.ReactNode }) {

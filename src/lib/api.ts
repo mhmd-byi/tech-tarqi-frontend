@@ -284,6 +284,21 @@ export async function fetchMessageImageUrl(messageId: string): Promise<string> {
   return URL.createObjectURL(await response.blob());
 }
 
+export function listPlans(): Promise<Plan[]> {
+  return request<Plan[]>("/plans");
+}
+
+export function updatePlan(
+  id: string,
+  changes: { priceCents?: number; active?: boolean; popular?: boolean }
+): Promise<Plan> {
+  return postJson<Plan>(`/plans/${id}`, changes, "PATCH");
+}
+
+export function listSubscriptions(): Promise<SubscriptionRow[]> {
+  return request<SubscriptionRow[]>("/subscriptions");
+}
+
 export function connectSocket(): Socket | null {
   const token = getToken();
   if (!token) return null;
