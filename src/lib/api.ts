@@ -328,6 +328,10 @@ export function listSubscriptions(): Promise<SubscriptionRow[]> {
   return request<SubscriptionRow[]>("/subscriptions");
 }
 
+export function sendTestEmail(): Promise<{ message: string }> {
+  return request<{ message: string }>("/mail/test", { method: "POST" });
+}
+
 export function connectSocket(): Socket | null {
   const token = getToken();
   if (!token) return null;
