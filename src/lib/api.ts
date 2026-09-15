@@ -95,6 +95,35 @@ export type OutgoingMessage =
       note?: string;
     };
 
+export type PlanService = "forex" | "comex" | "index";
+export type PlanTier = "bronze" | "silver" | "gold" | "platinum";
+
+export type BillingMode = "recurring" | "one_time";
+
+export type Plan = {
+  id: string;
+  service: PlanService;
+  tier: PlanTier;
+  label: string;
+  priceCents: number;
+  currency: string;
+  intervalMonths: number;
+  billingMode: BillingMode;
+  popular: boolean;
+  active: boolean;
+  paypalLinked?: boolean;
+};
+
+export type SubscriptionRow = {
+  id: string;
+  status: "incomplete" | "active" | "past_due" | "canceled" | "unpaid";
+  isActive: boolean;
+  currentPeriodEnd?: string;
+  cancelAtPeriodEnd?: boolean;
+  plan: Omit<Plan, "popular" | "active" | "paypalLinked"> | null;
+  user: { _id: string; name: string; username: string; email: string } | null;
+};
+
 export class ApiError extends Error {}
 
 export function getToken(): string | null {
