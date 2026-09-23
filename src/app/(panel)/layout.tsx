@@ -10,6 +10,7 @@ import { clearSession, getStoredUser, getToken, type PanelUser } from "@/lib/api
 const NAV = [
   { href: "/kyc", label: "KYC", roles: ["admin"] },
   { href: "/providers", label: "Providers", roles: ["admin"] },
+  { href: "/admins", label: "Admins", roles: ["admin"] },
   { href: "/assignments", label: "Assignments", roles: ["admin"] },
   { href: "/plans", label: "Plans", roles: ["admin"] },
   { href: "/subscriptions", label: "Subscriptions", roles: ["admin"] },

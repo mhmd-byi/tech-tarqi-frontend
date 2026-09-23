@@ -47,6 +47,13 @@ export type Provider = {
   clientCount: number;
 };
 
+export type Admin = {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+};
+
 export type AssignmentRow = {
   user: { id: string; name: string; username: string; email: string };
   assignment: { id: string; provider: { id: string; name: string }; since: string } | null;
@@ -229,6 +236,21 @@ export function createProvider(input: {
   password: string;
 }): Promise<Provider> {
   return postJson<Provider>("/providers", input);
+}
+
+export function listAdmins(): Promise<Admin[]> {
+  return request<Admin[]>("/admins");
+}
+
+export function createAdmin(input: {
+  name: string;
+  username: string;
+  email: string;
+  countryCode: string;
+  mobile: string;
+  password: string;
+}): Promise<Admin> {
+  return postJson<Admin>("/admins", input);
 }
 
 export function listAssignments(): Promise<AssignmentRow[]> {
