@@ -144,7 +144,7 @@ export default function KycReviewPage() {
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-zinc-200 bg-white p-6">
           <h2 className="text-sm font-semibold text-zinc-900">Details provided</h2>
-          <dl className="mt-4 grid grid-cols-2 gap-4 text-sm">
+          <dl className="mt-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
             <Field label="Name on passport" value={submission.fullName} />
             <Field label="Passport number" value={submission.passportNumber} />
             <Field label="Nationality" value={submission.nationality} />
@@ -154,7 +154,7 @@ export default function KycReviewPage() {
           </dl>
 
           <h2 className="mt-6 text-sm font-semibold text-zinc-900">Account</h2>
-          <dl className="mt-4 grid grid-cols-2 gap-4 text-sm">
+          <dl className="mt-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
             <Field label="Username" value={submission.user?.username} />
             <Field label="Email" value={submission.user?.email} />
             <Field

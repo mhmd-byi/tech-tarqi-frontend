@@ -99,7 +99,7 @@ export default function AdminsPage() {
       </p>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_360px]">
-        <div className="rounded-xl border border-zinc-200 bg-white">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
           {error && <p className="p-6 text-sm text-red-600">{error}</p>}
           {!error && admins === null && <p className="p-6 text-sm text-zinc-500">Loading…</p>}
           {admins?.length === 0 && (

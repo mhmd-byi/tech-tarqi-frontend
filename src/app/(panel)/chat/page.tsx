@@ -33,6 +33,13 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [canPost, setCanPost] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** Below lg, the thread list and the conversation don't fit on screen together. */
+  const [mobileView, setMobileView] = useState<"list" | "conversation">("list");
+
+  function selectRoom(next: Room) {
+    setRoom(next);
+    setMobileView("conversation");
+  }
 
   const socketRef = useRef<Socket | null>(null);
   const roomRef = useRef<{ room: Room; providerId: string | null }>({ room, providerId });
@@ -59,6 +66,7 @@ export default function ChatPage() {
     if (!providerId) return;
 
     setRoom({ type: "broadcast" });
+    setMobileView("list");
     listThreads(user?.role === "admin" ? providerId : undefined)
       .then(setThreads)
       .catch((err) => setError(err instanceof ApiError ? err.message : "Could not load threads"));
@@ -174,9 +182,13 @@ export default function ChatPage() {
 
       {providerId && (
         <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
-          <aside className="h-fit rounded-xl border border-zinc-200 bg-white p-2">
+          <aside
+            className={`h-fit rounded-xl border border-zinc-200 bg-white p-2 ${
+              mobileView === "list" ? "block" : "hidden"
+            } lg:block`}
+          >
             <button
-              onClick={() => setRoom({ type: "broadcast" })}
+              onClick={() => selectRoom({ type: "broadcast" })}
               className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
                 room.type === "broadcast" ? "bg-brand text-white" : "hover:bg-zinc-100"
               }`}
@@ -196,7 +208,7 @@ export default function ChatPage() {
               return (
                 <button
                   key={thread.id}
-                  onClick={() => setRoom({ type: "direct", thread })}
+                  onClick={() => selectRoom({ type: "direct", thread })}
                   className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                     active ? "bg-brand text-white" : "hover:bg-zinc-100"
                   }`}
@@ -210,12 +222,33 @@ export default function ChatPage() {
             })}
           </aside>
 
-          <section className="flex min-h-[32rem] flex-col rounded-xl border border-zinc-200 bg-white">
-            <header className="border-b border-zinc-200 px-4 py-3">
-              <h2 className="text-sm font-semibold text-zinc-900">{roomTitle}</h2>
-              {room.type === "broadcast" && (
-                <p className="text-xs text-zinc-500">Clients can read these tips but cannot reply.</p>
-              )}
+          <section
+            className={`flex min-h-[32rem] flex-col rounded-xl border border-zinc-200 bg-white ${
+              mobileView === "conversation" ? "flex" : "hidden"
+            } lg:flex`}
+          >
+            <header className="flex items-center gap-2 border-b border-zinc-200 px-4 py-3">
+              <button
+                onClick={() => setMobileView("list")}
+                className="-ml-1 rounded-lg p-1 text-zinc-500 hover:bg-zinc-100 lg:hidden"
+                aria-label="Back to list"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path
+                    d="M12.5 5L7.5 10l5 5"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              <div>
+                <h2 className="text-sm font-semibold text-zinc-900">{roomTitle}</h2>
+                {room.type === "broadcast" && (
+                  <p className="text-xs text-zinc-500">Clients can read these tips but cannot reply.</p>
+                )}
+              </div>
             </header>
 
             <div className="flex-1 overflow-y-auto">

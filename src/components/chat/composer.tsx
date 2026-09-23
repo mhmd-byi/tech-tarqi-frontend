@@ -122,7 +122,7 @@ export function Composer({
       {error && <p className="mb-2 text-sm text-red-600">{error}</p>}
 
       {mode === "message" ? (
-        <div className="flex items-end gap-2">
+        <div className="flex flex-wrap items-end gap-2">
           <div className="flex-1">
             <textarea
               value={text}
