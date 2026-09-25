@@ -85,9 +85,22 @@ export type ChatMessage = {
   text?: string;
   signal?: Signal;
   hasImage: boolean;
+  edited: boolean;
+  deleted: boolean;
   sender: { id: string; name: string; role: "provider" | "user" };
   createdAt: string;
 };
+
+export type MessageEdit =
+  | { text: string }
+  | {
+      symbol: string;
+      direction: "buy" | "sell";
+      entry: string;
+      stopLoss: string;
+      targets: string;
+      note?: string;
+    };
 
 export type OutgoingMessage =
   | { kind: "text"; text: string }
@@ -273,10 +286,17 @@ export function listBroadcastMessages(providerId: string): Promise<ChatMessage[]
   return request<ChatMessage[]>(`/chat/broadcast/${providerId}/messages`);
 }
 
-export function listDirectMessages(
-  assignmentId: string
-): Promise<{ canPost: boolean; status: string; messages: ChatMessage[] }> {
+export function listDirectMessages(assignmentId: string): Promise<{
+  canPost: boolean;
+  status: string;
+  theirLastReadAt?: string;
+  messages: ChatMessage[];
+}> {
   return request(`/chat/direct/${assignmentId}/messages`);
+}
+
+export function markDirectRead(assignmentId: string): Promise<{ ok: boolean }> {
+  return request<{ ok: boolean }>(`/chat/direct/${assignmentId}/read`, { method: "POST" });
 }
 
 /** One multipart body for every kind keeps the server-side parsing in one place. */
@@ -319,6 +339,14 @@ export function postDirectMessage(
     method: "POST",
     body: toFormData(message),
   });
+}
+
+export function editMessage(id: string, edit: MessageEdit): Promise<ChatMessage> {
+  return postJson<ChatMessage>(`/chat/messages/${id}`, edit, "PATCH");
+}
+
+export function deleteMessage(id: string): Promise<ChatMessage> {
+  return request<ChatMessage>(`/chat/messages/${id}`, { method: "DELETE" });
 }
 
 /**

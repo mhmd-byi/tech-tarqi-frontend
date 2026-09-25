@@ -8,14 +8,18 @@ import { MessageList } from "@/components/chat/message-list";
 import {
   ApiError,
   connectSocket,
+  deleteMessage,
+  editMessage,
   getStoredUser,
   listBroadcastMessages,
   listDirectMessages,
   listProviders,
   listThreads,
+  markDirectRead,
   postBroadcastMessage,
   postDirectMessage,
   type ChatMessage,
+  type MessageEdit,
   type OutgoingMessage,
   type PanelUser,
   type Provider,
@@ -35,10 +39,14 @@ export default function ChatPage() {
   const [error, setError] = useState<string | null>(null);
   /** Below lg, the thread list and the conversation don't fit on screen together. */
   const [mobileView, setMobileView] = useState<"list" | "conversation">("list");
+  /** Only meaningful for a direct thread — undefined hides read receipts entirely. */
+  const [theirLastReadAt, setTheirLastReadAt] = useState<string | undefined>(undefined);
+  const [editingMessage, setEditingMessage] = useState<ChatMessage | null>(null);
 
   function selectRoom(next: Room) {
     setRoom(next);
     setMobileView("conversation");
+    setEditingMessage(null);
   }
 
   const socketRef = useRef<Socket | null>(null);
@@ -80,10 +88,13 @@ export default function ChatPage() {
       if (room.type === "broadcast") {
         setMessages(await listBroadcastMessages(providerId));
         setCanPost(user?.role === "provider");
+        setTheirLastReadAt(undefined);
       } else {
         const result = await listDirectMessages(room.thread.id);
         setMessages(result.messages);
         setCanPost(result.canPost && user?.role === "provider");
+        setTheirLastReadAt(result.theirLastReadAt);
+        void markDirectRead(room.thread.id);
       }
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Could not load messages");
@@ -114,13 +125,41 @@ export default function ChatPage() {
       setMessages((existing) =>
         existing.some((item) => item.id === message.id) ? existing : [...existing, message]
       );
+
+      // The thread is already open, so this arrival counts as seen right away.
+      if (current.room.type === "direct") void markDirectRead(current.room.thread.id);
     });
+
+    socket.on("message:updated", (message: ChatMessage) => {
+      const current = roomRef.current;
+
+      const belongsHere =
+        current.room.type === "broadcast"
+          ? message.scope === "broadcast" && message.provider === current.providerId
+          : message.scope === "direct" && message.assignment === current.room.thread.id;
+
+      if (!belongsHere) return;
+
+      setMessages((existing) => existing.map((item) => (item.id === message.id ? message : item)));
+    });
+
+    socket.on(
+      "read:updated",
+      (payload: { assignmentId: string; role: "provider" | "user"; lastReadAt: string }) => {
+        const current = roomRef.current;
+        if (current.room.type !== "direct" || current.room.thread.id !== payload.assignmentId) return;
+
+        // Only the other side's read state matters to us here.
+        const isOwnRole = payload.role === (user?.role === "provider" ? "provider" : "user");
+        if (!isOwnRole) setTheirLastReadAt(payload.lastReadAt);
+      }
+    );
 
     return () => {
       socket.close();
       socketRef.current = null;
     };
-  }, []);
+  }, [user?.role]);
 
   /** Admins aren't members of any room, so they subscribe to whatever they open. */
   useEffect(() => {
@@ -145,6 +184,20 @@ export default function ChatPage() {
     setMessages((existing) =>
       existing.some((item) => item.id === sent.id) ? existing : [...existing, sent]
     );
+  }
+
+  async function handleSaveEdit(id: string, edit: MessageEdit) {
+    const updated = await editMessage(id, edit);
+    setMessages((existing) => existing.map((item) => (item.id === updated.id ? updated : item)));
+    setEditingMessage(null);
+  }
+
+  async function handleDelete(message: ChatMessage) {
+    if (!window.confirm("Delete this message? This can't be undone.")) return;
+
+    const updated = await deleteMessage(message.id);
+    setMessages((existing) => existing.map((item) => (item.id === updated.id ? updated : item)));
+    if (editingMessage?.id === message.id) setEditingMessage(null);
   }
 
   if (!user) return null;
@@ -258,15 +311,21 @@ export default function ChatPage() {
                 emptyLabel={
                   room.type === "broadcast" ? "No tips posted yet." : "No messages in this thread yet."
                 }
+                theirLastReadAt={room.type === "direct" ? theirLastReadAt : undefined}
+                onEdit={setEditingMessage}
+                onDelete={handleDelete}
               />
             </div>
 
-            {canPost ? (
+            {canPost || editingMessage ? (
               <Composer
                 onSend={handleSend}
                 placeholder={
                   room.type === "broadcast" ? "Share a tip with all clients…" : "Write a reply…"
                 }
+                editing={editingMessage}
+                onSaveEdit={handleSaveEdit}
+                onCancelEdit={() => setEditingMessage(null)}
               />
             ) : (
               <p className="border-t border-zinc-200 px-4 py-3 text-xs text-zinc-500">
