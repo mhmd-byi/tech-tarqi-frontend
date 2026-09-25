@@ -312,6 +312,7 @@ export default function ChatPage() {
                   room.type === "broadcast" ? "No tips posted yet." : "No messages in this thread yet."
                 }
                 theirLastReadAt={room.type === "direct" ? theirLastReadAt : undefined}
+                canModerate={user.role === "admin"}
                 onEdit={setEditingMessage}
                 onDelete={handleDelete}
               />

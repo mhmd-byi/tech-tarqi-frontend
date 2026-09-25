@@ -36,6 +36,7 @@ export function MessageList({
   currentUserId,
   emptyLabel,
   theirLastReadAt,
+  canModerate = false,
   onEdit,
   onDelete,
 }: {
@@ -44,6 +45,8 @@ export function MessageList({
   emptyLabel: string;
   /** Only meaningful for a direct thread — undefined hides read receipts entirely. */
   theirLastReadAt?: string;
+  /** Admins can edit/delete any message, not just their own. */
+  canModerate?: boolean;
   onEdit: (message: ChatMessage) => void;
   onDelete: (message: ChatMessage) => void;
 }) {
@@ -112,8 +115,8 @@ export function MessageList({
                 )}
               </p>
 
-              {isOwn && !message.deleted && (
-                <p className="mt-0.5 text-right text-xs">
+              {(isOwn || canModerate) && !message.deleted && (
+                <p className={`mt-0.5 text-xs ${isOwn ? "text-right" : "text-left"}`}>
                   <button
                     onClick={() => onEdit(message)}
                     className="text-zinc-400 hover:text-brand hover:underline"
