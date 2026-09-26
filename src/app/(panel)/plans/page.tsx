@@ -45,28 +45,16 @@ export default function PlansPage() {
     }
   }
 
-  const unlinked = (plans ?? []).filter((plan) => plan.paypalLinked === false).length;
-
   return (
     <>
       <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Plans</h1>
       <p className="mt-1 text-sm text-zinc-600">
-        Prices customers see in the app. Changing a price creates a new PayPal billing plan — anyone
-        already subscribed keeps the price they signed up on. Platinum is a 24-month term, which
-        PayPal cannot bill on a cycle, so it is sold as a one-off payment.
+        Prices customers see in the app. Every plan is a one-off payment for its term — changing
+        the price takes effect on the next purchase, with no PayPal-side plan to manage.
       </p>
 
       {error && <p className="mt-6 text-sm text-red-600">{error}</p>}
       {!error && plans === null && <p className="mt-6 text-sm text-zinc-500">Loading…</p>}
-
-      {plans !== null && unlinked > 0 && (
-        <p className="mt-6 rounded-lg bg-amber-50 p-3 text-sm text-amber-800">
-          {unlinked} of {plans.length} plans have no PayPal billing plan, so they cannot be
-          purchased yet. Set <code className="font-mono">PAYPAL_CLIENT_ID</code> and{" "}
-          <code className="font-mono">PAYPAL_CLIENT_SECRET</code> in the backend and run{" "}
-          <code className="font-mono">npm run seed:plans</code>.
-        </p>
-      )}
 
       {SERVICES.map((service) => {
         const rows = (plans ?? [])
@@ -86,8 +74,6 @@ export default function PlansPage() {
                     <th className="px-4 py-3 font-medium">Tier</th>
                     <th className="px-4 py-3 font-medium">Term</th>
                     <th className="px-4 py-3 font-medium">Price (USD)</th>
-                    <th className="px-4 py-3 font-medium">Billing</th>
-                    <th className="px-4 py-3 font-medium">PayPal</th>
                     <th className="px-4 py-3" />
                   </tr>
                 </thead>
@@ -121,18 +107,6 @@ export default function PlansPage() {
                             }
                             className="w-28 rounded-lg border border-zinc-300 px-2 py-1.5 text-sm outline-none focus:border-brand"
                           />
-                        </td>
-                        <td className="px-4 py-3 text-zinc-700">
-                          {plan.billingMode === "one_time" ? "One-off" : "Recurring"}
-                        </td>
-                        <td className="px-4 py-3">
-                          {plan.billingMode === "one_time" ? (
-                            <span className="text-zinc-500">No plan needed</span>
-                          ) : plan.paypalLinked ? (
-                            <span className="text-green-700">Linked</span>
-                          ) : (
-                            <span className="text-amber-700">Not linked</span>
-                          )}
                         </td>
                         <td className="px-4 py-3 text-right whitespace-nowrap">
                           <button

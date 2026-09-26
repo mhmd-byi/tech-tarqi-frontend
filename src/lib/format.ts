@@ -4,7 +4,7 @@ export function formatPrice(priceCents: number, currency: string): string {
 }
 
 export function formatTerm(intervalMonths: number): string {
-  if (intervalMonths === 12) return "Yearly";
-  if (intervalMonths === 24) return "Every 2 years";
-  return `Every ${intervalMonths} months`;
+  if (intervalMonths === 12) return "1 year";
+  if (intervalMonths === 24) return "2 years";
+  return `${intervalMonths} months`;
 }

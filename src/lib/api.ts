@@ -118,8 +118,6 @@ export type OutgoingMessage =
 export type PlanService = "forex" | "comex" | "index";
 export type PlanTier = "bronze" | "silver" | "gold" | "platinum";
 
-export type BillingMode = "recurring" | "one_time";
-
 export type Plan = {
   id: string;
   service: PlanService;
@@ -128,20 +126,17 @@ export type Plan = {
   priceCents: number;
   currency: string;
   intervalMonths: number;
-  billingMode: BillingMode;
   popular: boolean;
   active: boolean;
-  paypalLinked?: boolean;
 };
 
 export type SubscriptionRow = {
   id: string;
-  status: "incomplete" | "active" | "past_due" | "canceled" | "unpaid";
+  status: "incomplete" | "active" | "canceled";
   isActive: boolean;
   currentPeriodEnd?: string;
-  cancelAtPeriodEnd?: boolean;
   discountCents?: number;
-  plan: Omit<Plan, "popular" | "active" | "paypalLinked"> | null;
+  plan: Omit<Plan, "popular" | "active"> | null;
   user: { _id: string; name: string; username: string; email: string } | null;
 };
 

@@ -7,8 +7,6 @@ import { formatPrice, formatTerm } from "@/lib/format";
 
 const STATUS_STYLES: Record<string, string> = {
   active: "bg-green-100 text-green-800",
-  past_due: "bg-amber-100 text-amber-800",
-  unpaid: "bg-amber-100 text-amber-800",
   incomplete: "bg-zinc-100 text-zinc-700",
   canceled: "bg-red-100 text-red-800",
 };
@@ -29,7 +27,8 @@ export default function SubscriptionsPage() {
     <>
       <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Subscriptions</h1>
       <p className="mt-1 text-sm text-zinc-600">
-        Billing is handled by PayPal — these rows are updated by PayPal webhooks, not edited here.
+        Every plan is a one-off payment — these rows are updated when PayPal confirms a payment,
+        not edited here.
       </p>
 
       {error && <p className="mt-6 text-sm text-red-600">{error}</p>}
@@ -45,7 +44,7 @@ export default function SubscriptionsPage() {
                 <th className="px-4 py-3 font-medium">Plan</th>
                 <th className="px-4 py-3 font-medium">Price</th>
                 <th className="px-4 py-3 font-medium">Status</th>
-                <th className="px-4 py-3 font-medium">Renews / ends</th>
+                <th className="px-4 py-3 font-medium">Ends</th>
               </tr>
             </thead>
             <tbody>
@@ -71,9 +70,6 @@ export default function SubscriptionsPage() {
                     >
                       {row.status.replace("_", " ")}
                     </span>
-                    {row.cancelAtPeriodEnd && (
-                      <span className="ml-2 text-xs text-zinc-500">cancels at period end</span>
-                    )}
                   </td>
                   <td className="px-4 py-3 text-zinc-500">
                     {row.currentPeriodEnd
