@@ -14,6 +14,7 @@ const NAV = [
   { href: "/assignments", label: "Assignments", roles: ["admin"] },
   { href: "/plans", label: "Plans", roles: ["admin"] },
   { href: "/subscriptions", label: "Subscriptions", roles: ["admin"] },
+  { href: "/coupons", label: "Coupons", roles: ["admin", "provider"] },
   { href: "/chat", label: "Chat", roles: ["admin", "provider"] },
   { href: "/settings", label: "Settings", roles: ["admin"] },
 ];

@@ -140,8 +140,27 @@ export type SubscriptionRow = {
   isActive: boolean;
   currentPeriodEnd?: string;
   cancelAtPeriodEnd?: boolean;
+  discountCents?: number;
   plan: Omit<Plan, "popular" | "active" | "paypalLinked"> | null;
   user: { _id: string; name: string; username: string; email: string } | null;
+};
+
+export type CouponType = "percentage" | "fixed";
+
+export type Coupon = {
+  id: string;
+  code: string;
+  type: CouponType;
+  amount: number;
+  provider?: string;
+  applicablePlans: string[];
+  startsAt?: string;
+  expiresAt?: string;
+  usageLimit?: number;
+  usageLimitPerUser?: number;
+  usedCount: number;
+  active: boolean;
+  createdAt: string;
 };
 
 export class ApiError extends Error {}
@@ -372,6 +391,38 @@ export function updatePlan(
   changes: { priceCents?: number; active?: boolean; popular?: boolean }
 ): Promise<Plan> {
   return postJson<Plan>(`/plans/${id}`, changes, "PATCH");
+}
+
+export function listCoupons(): Promise<Coupon[]> {
+  return request<Coupon[]>("/coupons");
+}
+
+export function createCoupon(input: {
+  code: string;
+  type: CouponType;
+  amount: number;
+  applicablePlans: string[];
+  startsAt?: string;
+  expiresAt?: string;
+  usageLimit?: number;
+  usageLimitPerUser?: number;
+}): Promise<Coupon> {
+  return postJson<Coupon>("/coupons", input);
+}
+
+export function updateCoupon(
+  id: string,
+  changes: {
+    active?: boolean;
+    amount?: number;
+    applicablePlans?: string[];
+    startsAt?: string | null;
+    expiresAt?: string | null;
+    usageLimit?: number | null;
+    usageLimitPerUser?: number | null;
+  }
+): Promise<Coupon> {
+  return postJson<Coupon>(`/coupons/${id}`, changes, "PATCH");
 }
 
 export function listSubscriptions(): Promise<SubscriptionRow[]> {
