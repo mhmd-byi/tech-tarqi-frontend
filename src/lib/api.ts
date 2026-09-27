@@ -134,6 +134,7 @@ export type SubscriptionRow = {
   id: string;
   status: "incomplete" | "active" | "canceled";
   isActive: boolean;
+  isTrial: boolean;
   currentPeriodEnd?: string;
   discountCents?: number;
   plan: Omit<Plan, "popular" | "active"> | null;
