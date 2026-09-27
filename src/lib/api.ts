@@ -425,6 +425,23 @@ export function listSubscriptions(): Promise<SubscriptionRow[]> {
   return request<SubscriptionRow[]>("/subscriptions");
 }
 
+export type SignedAgreement = {
+  id: string;
+  user: { _id: string; name: string; username: string; email: string } | null;
+  signerName: string;
+  documentVersion: string;
+  signedAt: string;
+};
+
+export function listSignedAgreements(): Promise<SignedAgreement[]> {
+  return request<SignedAgreement[]>("/terms");
+}
+
+export async function fetchSignedAgreementUrl(userId: string): Promise<string> {
+  const response = await requestRaw(`/terms/${userId}/pdf`);
+  return URL.createObjectURL(await response.blob());
+}
+
 export function sendTestEmail(): Promise<{ message: string }> {
   return request<{ message: string }>("/mail/test", { method: "POST" });
 }
